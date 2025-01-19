@@ -4,8 +4,9 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, mean_absolute_percentage_error
+import time  # Для замера времени
 
 # Загрузка данных
 data = pd.read_excel('../data/co2.xlsx')  # Исходные данные
@@ -25,7 +26,7 @@ categorical_cols = X.select_dtypes(include=['object']).columns
 # Применяем обработку пропусков
 numerical_transformer = Pipeline(steps=[
     ('imputer', SimpleImputer(strategy='median')),
-    ('scaler', StandardScaler())  # Или MinMaxScaler для нормализации
+    ('scaler', StandardScaler())
 ])
 
 categorical_transformer = Pipeline(steps=[
@@ -43,14 +44,24 @@ preprocessor = ColumnTransformer(
 # Создание модели с обработкой данных
 model = Pipeline(steps=[
     ('preprocessor', preprocessor),
-    ('regressor', RandomForestRegressor(n_estimators=100, random_state=42))
+    ('regressor', LinearRegression())
 ])
 
 # Разделение данных на обучающую и тестовую выборки
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+# Замер времени начала обучения
+start_time = time.time()
+
 # Обучение модели
 model.fit(X_train, y_train)
+
+# Замер времени окончания обучения
+end_time = time.time()
+
+# Вычисление времени обучения
+training_time = end_time - start_time
+print(f"Время обучения модели: {training_time:.2f} секунд")
 
 # Прогнозирование
 y_pred = model.predict(X_test)

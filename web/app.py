@@ -78,13 +78,20 @@ def predict_value():
         # Предсказание
         user_prediction = predict(normalized_input, theta)
 
-        # Возврат предсказания на страницу
-        return render_template('index.html', prediction=f"Predicted CO2 Emission: {user_prediction[0]:.2f}")
+        # Возврат предсказания и введённых данных на страницу
+        return render_template(
+            'index.html',
+            prediction=f"Прогнозируемый выброс CO2: {user_prediction[0]:.2f}",
+            user_input=user_input
+        )
 
     except Exception as e:
-        # Возврат ошибки на страницу
-        return render_template('index.html', prediction=f"Error: {str(e)}")
-
+        # Возврат ошибки и введённых данных на страницу
+        return render_template(
+            'index.html',
+            prediction=f"Error: {str(e)}",
+            user_input=request.form
+        )
 
 if __name__ == '__main__':
     app.run(debug=True)

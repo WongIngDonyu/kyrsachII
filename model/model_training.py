@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import time  # Для замера времени
 
 # Инициализация весов (theta)
 def initialize_theta(n):
@@ -41,7 +42,7 @@ def gradient_descent(X, y, theta, alpha, iterations):
     return theta, cost_history
 
 # Обучение модели
-def train_model(X, y, alphas, iterations):
+def train_model(X_train, y_train, alphas, iterations):
     costs = {}  # Словарь для хранения истории функции стоимости для каждого значения alpha
     best_alpha = None  # Лучшее значение alpha
     best_cost = float('inf')  # Лучшее значение функции стоимости (инициализируем как бесконечность)
@@ -49,8 +50,19 @@ def train_model(X, y, alphas, iterations):
 
     for alpha in alphas:
         print(f"\nОбучение с alpha={alpha}")
-        theta = initialize_theta(X.shape[1])  # Инициализация весов
-        theta, cost_history = gradient_descent(X, y, theta, alpha, iterations)  # Градиентный спуск
+        theta = initialize_theta(X_train.shape[1])  # Инициализация весов
+
+        # Замер времени начала обучения
+        start_time = time.time()
+
+        theta, cost_history = gradient_descent(X_train, y_train, theta, alpha, iterations)  # Градиентный спуск
+
+        # Замер времени окончания обучения
+        end_time = time.time()
+
+        training_time = end_time - start_time  # Расчет времени обучения
+        print(f"Время обучения с alpha={alpha}: {training_time:.2f} секунд")
+
         costs[alpha] = cost_history  # Сохраняем историю функции стоимости
 
         # Проверяем, является ли текущее значение функции стоимости наименьшим
@@ -62,19 +74,30 @@ def train_model(X, y, alphas, iterations):
     return best_theta, best_alpha, best_cost, costs
 
 if __name__ == "__main__":
-    # Загрузка данных
-    X = np.loadtxt('../data/X.txt', delimiter=',')  # Загружаем признаки из файла
-    y = np.loadtxt('../data/y.txt', delimiter=',')  # Загружаем целевую переменную из файла
+    # Загрузка обучающих данных
+    X_train = np.loadtxt('../data/X_train.txt', delimiter=',')  # Загружаем обучающие признаки из файла
+    y_train = np.loadtxt('../data/y_train.txt', delimiter=',')  # Загружаем обучающую целевую переменную из файла
     alphas = [0.00001, 0.00005, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.07, 0.1, 0.2, 0.5, 1.0, 1.1, 1.2]  # Список значений alpha (скорость обучения)
     iterations = 1000  # Количество итераций
 
+    # Замер времени начала общего процесса обучения
+    overall_start_time = time.time()
+
     # Обучение модели
-    best_theta, best_alpha, best_cost, costs = train_model(X, y, alphas, iterations)
+    best_theta, best_alpha, best_cost, costs = train_model(X_train, y_train, alphas, iterations)
+
+    # Замер времени окончания общего процесса обучения
+    overall_end_time = time.time()
+
+    # Вычисление общего времени обучения
+    overall_training_time = overall_end_time - overall_start_time
+    print(f"\nОбщее время обучения: {overall_training_time:.2f} секунд")
 
     # Сохраняем лучшие параметры в файл
     np.savetxt('optimized_theta.csv', best_theta, delimiter=',', header='theta', comments='')
 
     # Построение графика изменения функции стоимости для каждого значения alpha
+    plt.figure(figsize=(10, 6))  # Размер графика
     for alpha, cost_history in costs.items():
         plt.plot(range(1, len(cost_history) + 1), cost_history, label=f'alpha={alpha}')
 
@@ -82,7 +105,7 @@ if __name__ == "__main__":
     plt.ylabel('Функция стоимости (J)')  # Подпись оси Y
     plt.title('Сходимость градиентного спуска при разных значениях alpha')  # Заголовок графика
     plt.legend()  # Отображение легенды
-    plt.ylim(0, 10000)
+    plt.ylim(0, 1000)  # Ограничение для оси Y
     plt.show()  # Отображение графика
 
     # Вывод лучшего значения alpha и соответствующей функции стоимости

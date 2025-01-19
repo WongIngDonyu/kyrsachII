@@ -18,19 +18,20 @@ def evaluate_model(predictions, y):
     return mae, mse, mape, r_squared
 
 if __name__ == "__main__":
-    # Загрузка данных
-    X = np.loadtxt('../data/X.txt', delimiter=',')  # Признаки
-    y = np.loadtxt('../data/y.txt', delimiter=',')  # Целевая переменная
-    theta = np.loadtxt('optimized_theta.csv', delimiter=',', skiprows=1)  # Параметры модели
+    # Загрузка тестовых данных
+    X_test = np.loadtxt('../data/X_test.txt', delimiter=',')  # Тестовые признаки
+    y_test = np.loadtxt('../data/y_test.txt', delimiter=',')  # Тестовая целевая переменная
+    theta = np.loadtxt('optimized_theta.csv', delimiter=',', skiprows=1)  # Параметры обученной модели
 
-    # Предсказания
-    predictions = predict(X, theta)
+    # Предсказания для тестовой выборки
+    predictions = predict(X_test, theta)
 
-    # Оценка метрик
-    mae, mse, mape, r_squared = evaluate_model(predictions, y)
+    # Оценка метрик на тестовой выборке
+    mae, mse, mape, r_squared = evaluate_model(predictions, y_test)
 
-    # Вывод результатов
-    print(f"Средняя абсолютная ошибка (MAE): {mae}")
-    print(f"Среднеквадратичная ошибка (MSE): {mse}")
-    print(f"Коэффициент детерминации (R-squared): {r_squared}")
+    # Вывод результатов оценки
+    print("Результаты оценки модели на тестовых данных:")
+    print(f"Средняя абсолютная ошибка (MAE): {mae:.2f}")
+    print(f"Среднеквадратичная ошибка (MSE): {mse:.2f}")
+    print(f"Коэффициент детерминации (R-squared): {r_squared:.4f}")
     print(f"Средний абсолютный процент ошибки (MAPE): {mape:.2f}%")

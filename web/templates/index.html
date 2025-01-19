@@ -1,85 +1,88 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CO2 Emission Prediction</title>
+    <title>Прогноз выбросов CO2</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>CO2 Emission Prediction</h1>
-    <form action="/predict" method="post">
-        <label for="vehicle_class">Vehicle Class:</label>
-        <select id="vehicle_class" name="vehicle_class" required>
-            <option value="SUV - SMALL">SUV - SMALL</option>
-            <option value="MID-SIZE">MID-SIZE</option>
-            <option value="COMPACT">COMPACT</option>
-            <option value="SUV - STANDARD">SUV - STANDARD</option>
-            <option value="FULL-SIZE">FULL-SIZE</option>
-            <option value="SUBCOMPACT">SUBCOMPACT</option>
-            <option value="PICKUP TRUCK - STANDARD">PICKUP TRUCK - STANDARD</option>
-            <option value="TWO-SEATER">TWO-SEATER</option>
-            <option value="MINICOMPACT">MINICOMPACT</option>
-            <option value="STATION WAGON - SMALL">STATION WAGON - SMALL</option>
-            <option value="PICKUP TRUCK - SMALL">PICKUP TRUCK - SMALL</option>
-            <option value="MINIVAN">MINIVAN</option>
-            <option value="SPECIAL PURPOSE VEHICLE">SPECIAL PURPOSE VEHICLE</option>
-            <option value="VAN - PASSENGER">VAN - PASSENGER</option>
-            <option value="STATION WAGON - MID-SIZE">STATION WAGON - MID-SIZE</option>
-            <option value="VAN - CARGO">VAN - CARGO</option>
-        </select><br><br>
-        <label for="engine_size">Engine Size (L):</label>
-        <input type="text" id="engine_size" name="engine_size" required><br><br>
-        <label for="cylinders">Cylinders:</label>
-        <input type="text" id="cylinders" name="cylinders" required><br><br>
-        <label for="transmission">Transmission:</label>
-        <select id="transmission" name="transmission" required>
-            <option value="AS6">AS6</option>
-            <option value="AS8">AS8</option>
-            <option value="M6">M6</option>
-            <option value="A6">A6</option>
-            <option value="A8">A8</option>
-            <option value="AM7">AM7</option>
-            <option value="A9">A9</option>
-            <option value="AS7">AS7</option>
-            <option value="AV">AV</option>
-            <option value="M5">M5</option>
-            <option value="AS10">AS10</option>
-            <option value="AM6">AM6</option>
-            <option value="AV7">AV7</option>
-            <option value="AV6">AV6</option>
-            <option value="M7">M7</option>
-            <option value="A5">A5</option>
-            <option value="AS9">AS9</option>
-            <option value="A4">A4</option>
-            <option value="AM8">AM8</option>
-            <option value="A7">A7</option>
-            <option value="AV8">AV8</option>
-            <option value="A10">A10</option>
-            <option value="AS5">AS5</option>
-            <option value="AV10">AV10</option>
-            <option value="AM5">AM5</option>
-            <option value="AM9">AM9</option>
-            <option value="AS4">AS4</option>
-        </select><br><br>
-        <label for="fuel_type">Fuel Type:</label>
-        <select id="fuel_type" name="fuel_type" required>
-            <option value="X">X (Gasoline)</option>
-            <option value="Z">Z</option>
-            <option value="E">E (Electric)</option>
-            <option value="D">D (Diesel)</option>
-            <option value="N">N</option>
-        </select><br><br>
-        <label for="fuel_consumption_city">Fuel Consumption City (L/100 km):</label>
-        <input type="text" id="fuel_consumption_city" name="fuel_consumption_city" required><br><br>
-        <label for="fuel_consumption_hwy">Fuel Consumption Hwy (L/100 km):</label>
-        <input type="text" id="fuel_consumption_hwy" name="fuel_consumption_hwy" required><br><br>
-        <label for="fuel_consumption_comb">Fuel Consumption Comb (L/100 km):</label>
-        <input type="text" id="fuel_consumption_comb" name="fuel_consumption_comb" required><br><br>
-        <label for="fuel_consumption_comb_mpg">Fuel Consumption Comb (mpg):</label>
-        <input type="text" id="fuel_consumption_comb_mpg" name="fuel_consumption_comb_mpg" required><br><br>
-        <button type="submit">Predict</button>
-    </form>
-
-    <h2>{{ prediction }}</h2>
+<body class="bg-light">
+    <div class="container py-5">
+        <h1 class="text-center mb-4">Прогноз выбросов CO2</h1>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form action="/predict" method="post">
+                    <div class="mb-3">
+                        <label for="vehicle_class" class="form-label">Класс транспортного средства:</label>
+                        <select id="vehicle_class" name="vehicle_class" class="form-select" required>
+                            <option value="SUV - SMALL" {{ 'selected' if user_input and user_input['Vehicle Class'] == 'SUV - SMALL' else '' }}>Внедорожник - Маленький</option>
+                            <option value="MID-SIZE" {{ 'selected' if user_input and user_input['Vehicle Class'] == 'MID-SIZE' else '' }}>Средний размер</option>
+                            <option value="COMPACT" {{ 'selected' if user_input and user_input['Vehicle Class'] == 'COMPACT' else '' }}>Компактный</option>
+                            <option value="SUV - STANDARD" {{ 'selected' if user_input and user_input['Vehicle Class'] == 'SUV - STANDARD' else '' }}>Внедорожник - Стандартный</option>
+                            <option value="FULL-SIZE" {{ 'selected' if user_input and user_input['Vehicle Class'] == 'FULL-SIZE' else '' }}>Полноразмерный</option>
+                            <option value="SUBCOMPACT" {{ 'selected' if user_input and user_input['Vehicle Class'] == 'SUBCOMPACT' else '' }}>Субкомпактный</option>
+                            <option value="PICKUP TRUCK - STANDARD" {{ 'selected' if user_input and user_input['Vehicle Class'] == 'PICKUP TRUCK - STANDARD' else '' }}>Пикап - Стандартный</option>
+                            <option value="TWO-SEATER" {{ 'selected' if user_input and user_input['Vehicle Class'] == 'TWO-SEATER' else '' }}>Двухместный</option>
+                            <option value="MINICOMPACT" {{ 'selected' if user_input and user_input['Vehicle Class'] == 'MINICOMPACT' else '' }}>Миникомпактный</option>
+                            <option value="STATION WAGON - SMALL" {{ 'selected' if user_input and user_input['Vehicle Class'] == 'STATION WAGON - SMALL' else '' }}>Универсал - Маленький</option>
+                            <option value="PICKUP TRUCK - SMALL" {{ 'selected' if user_input and user_input['Vehicle Class'] == 'PICKUP TRUCK - SMALL' else '' }}>Пикап - Маленький</option>
+                            <option value="MINIVAN" {{ 'selected' if user_input and user_input['Vehicle Class'] == 'MINIVAN' else '' }}>Минивэн</option>
+                            <option value="SPECIAL PURPOSE VEHICLE" {{ 'selected' if user_input and user_input['Vehicle Class'] == 'SPECIAL PURPOSE VEHICLE' else '' }}>Специальное транспортное средство</option>
+                            <option value="VAN - PASSENGER" {{ 'selected' if user_input and user_input['Vehicle Class'] == 'VAN - PASSENGER' else '' }}>Фургон - Пассажирский</option>
+                            <option value="STATION WAGON - MID-SIZE" {{ 'selected' if user_input and user_input['Vehicle Class'] == 'STATION WAGON - MID-SIZE' else '' }}>Универсал - Средний</option>
+                            <option value="VAN - CARGO" {{ 'selected' if user_input and user_input['Vehicle Class'] == 'VAN - CARGO' else '' }}>Фургон - Грузовой</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="engine_size" class="form-label">Объём двигателя (л):</label>
+                        <input type="text" id="engine_size" name="engine_size" class="form-control" value="{{ user_input['Engine Size(L)'] if user_input else '' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cylinders" class="form-label">Цилиндры:</label>
+                        <input type="text" id="cylinders" name="cylinders" class="form-control" value="{{ user_input['Cylinders'] if user_input else '' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="transmission" class="form-label">Коробка передач:</label>
+                        <select id="transmission" name="transmission" class="form-select" required>
+                            {% for option in ['AS6', 'AS8', 'M6', 'A6', 'A8', 'AM7', 'A9', 'AS7', 'AV', 'M5', 'AS10', 'AM6', 'AV7', 'AV6', 'M7', 'A5', 'AS9', 'A4', 'AM8', 'A7', 'AV8', 'A10', 'AS5', 'AV10', 'AM5', 'AM9', 'AS4'] %}
+                                <option value="{{ option }}" {{ 'selected' if user_input and user_input['Transmission'] == option else '' }}>{{ option }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fuel_type" class="form-label">Тип топлива:</label>
+                        <select id="fuel_type" name="fuel_type" class="form-select" required>
+                            <option value="X" {{ 'selected' if user_input and user_input['Fuel Type'] == 'X' else '' }}>X (Бензин)</option>
+                            <option value="Z" {{ 'selected' if user_input and user_input['Fuel Type'] == 'Z' else '' }}>Z</option>
+                            <option value="E" {{ 'selected' if user_input and user_input['Fuel Type'] == 'E' else '' }}>E (Электричество)</option>
+                            <option value="D" {{ 'selected' if user_input and user_input['Fuel Type'] == 'D' else '' }}>D (Дизель)</option>
+                            <option value="N" {{ 'selected' if user_input and user_input['Fuel Type'] == 'N' else '' }}>N</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fuel_consumption_city" class="form-label">Расход топлива в городе (л/100 км):</label>
+                        <input type="text" id="fuel_consumption_city" name="fuel_consumption_city" class="form-control" value="{{ user_input['Fuel Consumption City (L/100 km)'] if user_input else '' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fuel_consumption_hwy" class="form-label">Расход топлива на шоссе (л/100 км):</label>
+                        <input type="text" id="fuel_consumption_hwy" name="fuel_consumption_hwy" class="form-control" value="{{ user_input['Fuel Consumption Hwy (L/100 km)'] if user_input else '' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fuel_consumption_comb" class="form-label">Средний расход топлива (л/100 км):</label>
+                        <input type="text" id="fuel_consumption_comb" name="fuel_consumption_comb" class="form-control" value="{{ user_input['Fuel Consumption Comb (L/100 km)'] if user_input else '' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fuel_consumption_comb_mpg" class="form-label">Средний расход топлива (mpg):</label>
+                        <input type="text" id="fuel_consumption_comb_mpg" name="fuel_consumption_comb_mpg" class="form-control" value="{{ user_input['Fuel Consumption Comb (mpg)'] if user_input else '' }}" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Предсказать</button>
+                </form>
+                {% if prediction %}
+                    <h2 class="mt-4 text-center text-success">{{ prediction }}</h2>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,11 +1,16 @@
 import numpy as np
 import pandas as pd
 import json
+from sklearn.model_selection import train_test_split
 
 # Загрузка датасета
 def load_data(file_path):
     data = pd.read_excel(file_path)
     return data
+
+# Добавление столбца нулей к данным
+def add_zeros_colomn(X):
+    return np.c_[np.ones(X.shape[0]), X]
 
 # Кодирование категориальных переменных
 def encode_categorical(data, columns):
@@ -20,10 +25,6 @@ def encode_categorical(data, columns):
 def save_encoders(encoders, output_file):
     with open(output_file, 'w') as file:
         json.dump(encoders, file, indent=4)
-
-# Добавление столбца нулей к данным
-def add_zeros_colomn(X):
-    return np.c_[np.ones(X.shape[0]), X]
 
 # Вычисление минимальных и максимальных значений признаков
 def calculate_min_max(X):
@@ -72,13 +73,18 @@ if __name__ == "__main__":
     # Нормализуем данные
     X = normalize_features(X, feature_min, feature_max)
 
+    # Разделение данных на обучающую и тестовую выборки
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Сохранение обучающих и тестовых данных
+    np.savetxt('X_train.txt', X_train, delimiter=',')
+    np.savetxt('X_test.txt', X_test, delimiter=',')
+    np.savetxt('y_train.txt', y_train, delimiter=',')
+    np.savetxt('y_test.txt', y_test, delimiter=',')
+
     # Сохраняем нормализованные данные
     save_normalized_data(X, y, 'normalized_data.xlsx')
 
     # Сохраняем минимальные и максимальные значения признаков
     np.savetxt('feature_min.txt', feature_min, delimiter=',')
     np.savetxt('feature_max.txt', feature_max, delimiter=',')
-
-    # Сохраняем признаки (X) и целевую переменную (y) в текстовые файлы
-    np.savetxt('X.txt', X, delimiter=',')
-    np.savetxt('y.txt', y, delimiter=',')

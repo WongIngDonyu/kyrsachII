@@ -13,7 +13,7 @@ if __name__ == "__main__":
     theta = np.loadtxt('optimized_theta.csv', delimiter=',', skiprows=1)
 
     # Пример пользовательского ввода
-    user_input = [0,2,4,14,4,9.9,6.7,8.5,33]
+    user_input = [0,2.4,4,25,4,11.2,7.7,9.6,29]
     normalized_input = normalize_features(np.array(user_input).reshape(1, -1), feature_min, feature_max)
     normalized_input = add_zeros_colomn(normalized_input)
 
