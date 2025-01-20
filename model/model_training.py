@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from data.data_preprocessing import add_single_colomn
 import time  # Для замера времени
 
 # Инициализация весов (theta)
@@ -77,6 +78,10 @@ if __name__ == "__main__":
     # Загрузка обучающих данных
     X_train = np.loadtxt('../data/X_train.txt', delimiter=',')  # Загружаем обучающие признаки из файла
     y_train = np.loadtxt('../data/y_train.txt', delimiter=',')  # Загружаем обучающую целевую переменную из файла
+
+    # Добавляем столбец единиц для bias term
+    X_train = add_single_colomn(X_train)
+
     alphas = [0.00001, 0.00005, 0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.07, 0.1, 0.2, 0.5, 1.0, 1.1, 1.2]  # Список значений alpha (скорость обучения)
     iterations = 1000  # Количество итераций
 

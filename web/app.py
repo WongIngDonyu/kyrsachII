@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template
 import numpy as np
 import json
-from data.data_preprocessing import normalize_features, add_zeros_colomn
+from data.data_preprocessing import normalize_features, add_single_colomn
 from model.model_training import predict
 
 
@@ -73,7 +73,7 @@ def predict_value():
 
         # Нормализация данных пользователя
         normalized_input = normalize_features(np.array(encoded_input).reshape(1, -1), feature_min, feature_max)
-        normalized_input = add_zeros_colomn(normalized_input)
+        normalized_input = add_single_colomn(normalized_input)
 
         # Предсказание
         user_prediction = predict(normalized_input, theta)

@@ -1,5 +1,6 @@
 import numpy as np
 from model_training import predict
+from data.data_preprocessing import add_single_colomn
 
 # Оценка качества модели
 def evaluate_model(predictions, y):
@@ -22,6 +23,9 @@ if __name__ == "__main__":
     X_test = np.loadtxt('../data/X_test.txt', delimiter=',')  # Тестовые признаки
     y_test = np.loadtxt('../data/y_test.txt', delimiter=',')  # Тестовая целевая переменная
     theta = np.loadtxt('optimized_theta.csv', delimiter=',', skiprows=1)  # Параметры обученной модели
+
+    # Добавление 1 для учета thetha0
+    X_test = add_single_colomn(X_test)
 
     # Предсказания для тестовой выборки
     predictions = predict(X_test, theta)

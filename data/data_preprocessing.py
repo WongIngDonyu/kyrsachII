@@ -8,8 +8,8 @@ def load_data(file_path):
     data = pd.read_excel(file_path)
     return data
 
-# Добавление столбца нулей к данным
-def add_zeros_colomn(X):
+# Добавление столбца единиц к данным
+def add_single_colomn(X):
     return np.c_[np.ones(X.shape[0]), X]
 
 # Кодирование категориальных переменных
